@@ -35,13 +35,18 @@ BiomartVisualization.Network = {
 
                 // A group with a circle and a text for each data.
                 function makeBubbleGroups(svg, nodes, config) {
-                        var groups = svg.selectAll('g')
+                        var group = svg.append('svg:g')
+
+                        if (config['id'])
+                                group.attr('id', config['id'])
+
+                        var bubbles = group.selectAll('circle')
                                 .data(nodes)
 
-                        var groupEnter = groups.enter()
-                                .append('g')
+                        bubbles.exit()
+                                .remove()
 
-                        groupEnter
+                        bubbles = bubbles.enter()
                                 .append('circle')
                                 .attr({
                                         r: config.radius,
@@ -49,12 +54,7 @@ BiomartVisualization.Network = {
                                         fill: config.color,
                                         id: config.id })
 
-                        // Exit
-                        // TODO: add transition.
-                        groups.exit()
-                                .remove()
-
-                        return groupEnter
+                        return bubbles
                 }
 
                 function graph (svg, nodes, edges, config) {
@@ -177,6 +177,16 @@ BiomartVisualization.Network = {
                         // Draw the graph chart without positioning the elements, and return
                         // bubbles and links: { bubbles: ..., links: ... }
                         var graphChart = this.Graph(svg, nodes, edges, config.graph)
+                        graphChart.bubbles.on('mouseover', function () {
+                                d3.select(this)
+                                        .transition()
+                                        .attr('r', r * 2) })
+                                .on('mouseout', function () {
+                                        d3.select(this)
+                                                .transition()
+                                                .attr('r', config.graph.radius)
+                                })
+
                         var text
 
                         if (config.text) {
@@ -198,14 +208,13 @@ BiomartVisualization.Network = {
                                         y2: function(d) { return d.target.y } })
 
                                 graphChart.bubbles
-                                        .selectAll('circle')
                                         .attr('transform', function (d) {
                                                 d.x = Math.max(r, Math.min(w - r, d.x))
                                                 d.y = Math.max(r, Math.min(h - r, d.y))
                                                 return 'translate(' + d.x + ',' + d.y + ')' })
 
                                 config.text && text.attr('transform', function (d) {
-                                        return 'translate('+ d.x +','+ d.y +')' })
+                                        return 'translate('+ (d.x + 10) +','+ d.y +')' })
                         }
 
                         function dragstart (d) {
