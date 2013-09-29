@@ -1,0 +1,11 @@
+{
+        "launch_in_dev": [
+                "Chrome"
+        ],
+        "src_files": [
+                "lib/**/*.js",
+                "src/biomart_visualization.js",
+                "src/graph.js",
+                "test/**/*.js"
+        ]
+}

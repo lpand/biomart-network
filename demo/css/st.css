@@ -1,0 +1,20 @@
+
+text.shadow {
+  stroke: #fff;
+  stroke-width: 3px;
+  stroke-opacity: .8;
+}
+
+.edge {
+    stroke: #666;
+    stroke-width: 2px;
+ }
+
+.bubble {
+  stroke-width: 3;
+  stroke: #fff;
+}
+
+#graph circle {
+  cursor: move;
+}
