@@ -28,7 +28,7 @@
             edgeClassName: 'edge',
             width: width,
             height: height,
-            radius: 20,
+            radius: 10,
             color: function(d) { return '#bcbd22' },
             id: function (d, i) { return 'node' + i }
         }
