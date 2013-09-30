@@ -34,19 +34,14 @@ BiomartVisualization.Network = {
                 }
 
                 // A group with a circle and a text for each data.
-                function makeBubbleGroups(svg, nodes, config) {
-                        var group = svg.append('svg:g')
-
-                        if (config['id'])
-                                group.attr('id', config['id'])
-
-                        var bubbles = group.selectAll('circle')
+                function makeBubbles(svg, nodes, config) {
+                        var update = svg.selectAll('circle')
                                 .data(nodes)
 
-                        bubbles.exit()
+                        update.exit()
                                 .remove()
 
-                        bubbles = bubbles.enter()
+                        var bubbles = update.enter()
                                 .append('circle')
                                 .attr({
                                         r: config.radius,
@@ -58,9 +53,14 @@ BiomartVisualization.Network = {
                 }
 
                 function graph (svg, nodes, edges, config) {
+                        var group = svg.append('svg:g')
+
+                        if ('groupId' in config)
+                                group.attr('id', config.groupId)
+
                         return {
-                                links: makeLines(svg, edges, config),
-                                bubbles: makeBubbleGroups(svg, nodes, config)
+                                links: makeLines(group, edges, config),
+                                bubbles: makeBubbles(group, nodes, config)
                         }
                 }
 
@@ -139,8 +139,8 @@ BiomartVisualization.Network = {
                         }
 
                         var group = svg.append('svg:g')
-                        if (config['id'])
-                                group.attr('id', config['id'])
+                        if ('groupId' in config)
+                                group.attr('id', config.groupId)
 
                         var text = group.selectAll('g')
                                 .data(data)
@@ -173,7 +173,6 @@ BiomartVisualization.Network = {
                 "use strict"
 
                 function make (svg, nodes, edges, config) {
-
                         // Draw the graph chart without positioning the elements, and return
                         // bubbles and links: { bubbles: ..., links: ... }
                         var graphChart = this.Graph(svg, nodes, edges, config.graph)

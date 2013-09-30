@@ -9,7 +9,9 @@ var graphConfig = {
         edgeClassName: 'graph-chart-edge',
         radius: 20,
         color: '#bcbd22',
-        id: function (d) { return d.name }
+        'id': function (d) {
+                return d.name },
+        'groupId': 'bubbles-lines-group'
 }
 
 var textConfig = {
@@ -19,7 +21,7 @@ var textConfig = {
         'text-anchor': 'start',
         'text': function (d, i) {
                 return d.name },
-        'id': 'text-group'
+        'groupId': 'text-group'
 }
 
 function setupAndTeardown () {
@@ -61,8 +63,12 @@ describe ('BiomartVisualization.Graph.Graph', function () {
                 d3.select('#graph').remove()
         })
 
+        it ('creates a group with the right name', function () {
+                expect(d3.select('#bubbles-lines-group').empty()).toBe(false)
+        })
+
         it('creates the proper number of lines', function () {
-                var lines = d3.selectAll('line')
+                var lines = d3.select('#bubbles-lines-group').selectAll('line')
                 expect(lines.size()).toEqual(this.edges.length)
         })
 
@@ -73,11 +79,9 @@ describe ('BiomartVisualization.Graph.Graph', function () {
                 })
         })
 
-        it ('creates the proper number of groups wrapping bubbles', function () {
-                var groups = d3.select('#graph-group').selectAll('g')
-                var circles = groups.selectAll('circle')
-                expect(groups.size()).toEqual(this.nodes.length)
-                expect(circles.size(), this.nodes.length)
+        it ('creates the proper number of bubbles', function () {
+                var circles = d3.select('#bubbles-lines-group').selectAll('circle')
+                expect(circles.size()).toBe(this.nodes.length)
                 circles.each(function () {
                         expect(this.getAttribute('class')).toEqual(graphConfig.nodeClassName)
                 })
@@ -106,7 +110,7 @@ describe ('BiomartVisualization.Graph.Text', function () {
 
         beforeEach(function () {
                 text = G.Text(this.group, this.nodes, textConfig)
-                textGroup = d3.select('#'+textConfig['id'])
+                textGroup = d3.select('#'+textConfig.groupId)
         })
 
         afterEach(function () {
