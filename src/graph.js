@@ -235,3 +235,5 @@ BiomartVisualization.Network = {
 
         })(d3)
 }
+
+d3.BiomartVisualization = BiomartVisualization
