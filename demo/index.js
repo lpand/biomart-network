@@ -1,4 +1,5 @@
-(function (d3, Graph) {
+
+var players = (function (d3, Graph) {
 
         "use strict"
 
@@ -20,7 +21,8 @@
                 { source: nodes[0], target: nodes[1] },
                 { source: nodes[3], target: nodes[2] },
                 { source: nodes[3], target: nodes[0] },
-                { source: nodes[2], target: nodes[3] }
+                { source: nodes[2], target: nodes[3] },
+                { source: nodes[3], target: nodes[1] }
         ]
 
         var graphConfig = {
@@ -64,8 +66,6 @@
         }
 
 
-        Graph.make(group, nodes, edges, config)
-
-
+        return Graph.make(group, nodes, edges, config)
 
 })(d3, BiomartVisualization.Network)
