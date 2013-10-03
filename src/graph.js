@@ -53,11 +53,12 @@ BiomartVisualization.Network = {
                 }
 
                 function graph (svg, nodes, edges, config) {
-                        var group = svg.append('svg:g')
-
-                        if ('groupId' in config)
+                        var group = svg
+                        if ('groupId' in config) {
+                                if (d3.select(config.groupId).empty())
+                                        group = svg.append('svg:g')
                                 group.attr('id', config.groupId)
-
+                        }
                         return {
                                 links: makeLines(group, edges, config),
                                 bubbles: makeBubbles(group, nodes, config)

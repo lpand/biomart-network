@@ -4,15 +4,7 @@ var G = BiomartVisualization.Network
 var width = 600
 var height = 500
 
-var graphConfig = {
-        nodeClassName: 'gene',
-        edgeClassName: 'graph-chart-edge',
-        radius: 20,
-        color: '#bcbd22',
-        'id': function (d) {
-                return d.name },
-        'groupId': 'bubbles-lines-group'
-}
+var graphConfig
 
 var textConfig = {
         'font-family': 'serif',
@@ -26,6 +18,15 @@ var textConfig = {
 
 function setupAndTeardown () {
         beforeEach(function () {
+                graphConfig = {
+                        nodeClassName: 'gene',
+                        edgeClassName: 'graph-chart-edge',
+                        radius: 20,
+                        color: '#bcbd22',
+                        'id': function (d) {
+                                return d.name },
+                        'groupId': 'bubbles-lines-group'
+                }
                 this.group = d3.select('body')
                         .append('svg')
                         .attr({
@@ -45,6 +46,7 @@ function setupAndTeardown () {
         })
 
         afterEach(function () {
+                this.group.remove()
                 this.group = null
         })
 }
@@ -63,8 +65,16 @@ describe ('BiomartVisualization.Graph.Graph', function () {
                 d3.select('#graph').remove()
         })
 
-        it ('creates a group with the right name', function () {
+        it ('creates a group with the right name when provided', function () {
                 expect(d3.select('#bubbles-lines-group').empty()).toBe(false)
+        })
+
+        it ('use the svg as canvas when groupId is undefined', function () {
+                d3.select('#bubbles-lines-group').remove()
+                delete graphConfig.groupId
+                G.Graph(this.group, this.nodes, this.edges, graphConfig)
+                // TODO: bubbles presence wasn't tested yet
+                expect(d3.select('circle').node().parentNode.id).toEqual(this.group.node().id)
         })
 
         it('creates the proper number of lines', function () {
